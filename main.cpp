@@ -6,6 +6,7 @@ int main(int argc, char* argv[])
 	srand(time(0));
 	Tetris* tetris = new Tetris();
 	const char* title = "Tetris";
+	//agregando
 	if (tetris->init(title))
 	{
 		while (tetris->isrunning())
@@ -16,7 +17,6 @@ int main(int argc, char* argv[])
 			tetris->updateRender();
 
 		}
-
 	}
 	else
 	{
@@ -27,4 +27,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
