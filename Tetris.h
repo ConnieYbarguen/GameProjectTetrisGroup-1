@@ -32,6 +32,14 @@ public:
 	void gameplay();
 	void updateRender();
 	void clean();
+private:
+	enum { ScreenW = 600, ScreenH = 760 };
+	enum { BlockW = 36, BlockH = 36 };
+	enum { Lines = 20, Cols = 10 };
+	SDL_Window* window = NULL;
+	SDL_Renderer* render = NULL;
+	SDL_Texture* background = NULL, * blocks = NULL;
+	SDL_Rect srcR = { 0, 0, BlockW, BlockH }, destR = { 0, 0, BlockW, BlockH };
 
 
 };
