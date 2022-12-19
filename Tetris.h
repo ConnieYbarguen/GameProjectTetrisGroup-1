@@ -40,6 +40,15 @@ private:
 	SDL_Renderer* render = NULL;
 	SDL_Texture* background = NULL, * blocks = NULL;
 	SDL_Rect srcR = { 0, 0, BlockW, BlockH }, destR = { 0, 0, BlockW, BlockH };
+	bool running = false;
+	int field[Lines][Cols] = { 0 };
+	static const int figures[7][4];
+	struct Point
+	{
+		int x, y;
+	} items[4], backup[4];
+	int color = 1;
+	int dx = 0;
 
 
 };
