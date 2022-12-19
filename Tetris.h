@@ -49,9 +49,9 @@ private:
 	} items[4], backup[4];
 	int color = 1;
 	int dx = 0;
-
-
+	bool rotate = false;
+	unsigned int delay = 300;
+	Uint32 startTime = 0, currentTime = 0;
 };
-
 
 #endif // !TETRIS_H_
