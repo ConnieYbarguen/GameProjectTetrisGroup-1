@@ -28,6 +28,10 @@ public:
 	void nextTetrimino();
 	void handleEvents();
 	void setRectPos(SDL_Rect& rect, int x = 0, int y = 0, int w = BlockW, int h = BlockH);
+	void moveRectPos(SDL_Rect& rect, int x, int y);
+	void gameplay();
+	void updateRender();
+	void clean();
 
 
 };
