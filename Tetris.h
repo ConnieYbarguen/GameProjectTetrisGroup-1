@@ -14,14 +14,17 @@ public:
 	~Tetris()
 	{
 	}
+
 	void setCurrentTime(Uint32 t)
 	{
 		currentTime = t;
 	}
+
 	bool isrunning()
 	{
 		return running;
 	}
+	//CORRIGIENDO Y AGREGANDO
 	bool isvalid();
 
 	bool init(const char* title);
@@ -32,6 +35,7 @@ public:
 	void gameplay();
 	void updateRender();
 	void clean();
+
 private:
 	enum { ScreenW = 600, ScreenH = 760 };
 	enum { BlockW = 36, BlockH = 36 };
@@ -40,6 +44,7 @@ private:
 	SDL_Renderer* render = NULL;
 	SDL_Texture* background = NULL, * blocks = NULL;
 	SDL_Rect srcR = { 0, 0, BlockW, BlockH }, destR = { 0, 0, BlockW, BlockH };
+
 	bool running = false;
 	int field[Lines][Cols] = { 0 };
 	static const int figures[7][4];
@@ -53,5 +58,6 @@ private:
 	unsigned int delay = 300;
 	Uint32 startTime = 0, currentTime = 0;
 };
+
 
 #endif // !TETRIS_H_
