@@ -14,6 +14,10 @@ public:
 	~Tetris()
 	{
 	}
+	void setCurrentTime(Uint32 t)
+	{
+		currentTime = t;
+	}
 
 
 };
