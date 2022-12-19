@@ -18,6 +18,10 @@ public:
 	{
 		currentTime = t;
 	}
+	bool isrunning()
+	{
+		return running;
+	}
 
 
 };
