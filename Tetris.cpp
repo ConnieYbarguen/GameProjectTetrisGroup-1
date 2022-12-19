@@ -36,6 +36,7 @@ bool Tetris::init(const char* title)
 				loadSurf = IMG_Load("img/blocks.png");
 				blocks = SDL_CreateTextureFromSurface(render, loadSurf);
 				SDL_FreeSurface(loadSurf);
+				//Corregido
 				nextTetrimino();
 			}
 			else
