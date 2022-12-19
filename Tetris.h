@@ -24,7 +24,7 @@ public:
 	{
 		return running;
 	}
-
+	//CORRIGIENDO Y AGREGANDO
 	bool isvalid();
 
 	bool init(const char* title);
