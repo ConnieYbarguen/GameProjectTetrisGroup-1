@@ -8,7 +8,15 @@ int main(int argc, char* argv[])
 	const char* title = "Tetris";
 	if (tetris->init(title))
 	{
-		
+		while (tetris->isrunning())
+		{
+			tetris->setCurrentTime(SDL_GetTicks());
+			tetris->handleEvents();
+			tetris->gameplay();
+			tetris->updateRender();
+
+		}
+
 	}
 	else
 	{
