@@ -79,3 +79,12 @@ void Tetris::updateRender()
 	SDL_RenderPresent(render);
 
 }
+
+void Tetris::clean()
+{
+	SDL_DestroyTexture(blocks);
+	SDL_DestroyTexture(background);
+	SDL_DestroyRenderer(render);
+	IMG_Quit();
+	SDL_Quit();
+}
