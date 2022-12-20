@@ -9,3 +9,14 @@ bool Tetris::isvalid()
 			return false;
 	return true;
 }
+
+void Tetris::nextTetrimino()
+{
+	color = 1 + rand() % 7;
+	int n = rand() % 7;
+	for (int i = 0; i < 4; i++)
+	{
+		items[i].x = figures[n][i] % 4;
+		items[i].y = int(figures[n][i] / 4);
+	}
+}
