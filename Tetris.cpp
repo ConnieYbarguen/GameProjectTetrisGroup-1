@@ -80,6 +80,77 @@ void Tetris::updateRender()
 
 }
 
+void Tetris::gameplay()
+{
+
+	////////// backup
+	for (int i = 0; i < 4; i++)
+		backup[i] = items[i];
+	////////// move
+	if (dx)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			items[i].x += dx;
+		}
+		if (!isvalid())
+			for (int i = 0; i < 4; i++)
+				items[i] = backup[i];
+	}
+
+	///////// rotate
+	if (rotate)
+	{
+		Point p = items[2];	// center of rotation
+		for (int i = 0; i < 4; i++)
+		{
+			int x = items[i].y - p.y;
+			int y = items[i].x - p.x;
+			items[i].x = p.x - x;
+			items[i].y = p.y + y;
+		}
+		if (!isvalid())
+			for (int i = 0; i < 4; i++)
+				items[i] = backup[i];
+	}
+	///////// tick
+	if (currentTime - startTime > delay)
+	{
+		for (int i = 0; i < 4; i++)
+			backup[i] = items[i];
+		for (int i = 0; i < 4; i++)
+			items[i].y++;
+		if (!isvalid())
+		{
+			for (int i = 0; i < 4; i++)
+				field[backup[i].y][backup[i].x] = color;
+			nextTetrimino();
+		}
+
+		startTime = currentTime;
+	}
+
+	//////// check lines
+	int k = Lines - 1;
+	for (int i = k; i > 0; i--)
+	{
+		int count = 0;
+		for (int j = 0; j < Cols; j++)
+		{
+			if (field[i][j])
+				count++;
+			field[k][j] = field[i][j];
+		}
+		if (count < Cols)
+			k--;
+	}
+	dx = 0;
+	rotate = false;
+	delay = 300;
+
+}
+
+
 void Tetris::clean()
 {
 	SDL_DestroyTexture(blocks);
