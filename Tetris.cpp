@@ -1,12 +1,53 @@
 #include <iostream>
 #include "Tetris.h"
-bool Tetris::isvalid()
+/*
+	0	1	2	3
+	4	5	6	7
+*/
+const int Tetris::figures[7][4] =
 {
-	for (int i = 0; i < 4; i++)
-		if (items[i].x < 0 || items[i].x >= Cols || items[i].y >= Lines)
+	0,1,2,3,	// I
+	0,4,5,6,	// J
+	2,6,5,4,	// L
+	1,2,5,6,	// O
+	2,1,5,4,	// S
+	1,4,5,6,	// T
+	0,1,5,6,	// Z
+};
+bool Tetris::init(const char* title)
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	{
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenW, ScreenH, SDL_WINDOW_SHOWN);
+		if (window != NULL)
+		{
+			render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+			if (render != NULL)
+			{
+				SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+				int imgFlags = IMG_INIT_PNG;
+				int initted = IMG_Init(imgFlags);
+				if ((initted & imgFlags) != imgFlags)
+					std::cout << "Failed to init required png support\n" << "IMG_Init() Error : " << IMG_GetError() << std::endl;
+				SDL_Surface* loadSurf = IMG_Load("img/background.png");
+				background = SDL_CreateTextureFromSurface(render, loadSurf);
+				SDL_FreeSurface(loadSurf);
+				loadSurf = IMG_Load("img/blocks.png");
+				blocks = SDL_CreateTextureFromSurface(render, loadSurf);
+				SDL_FreeSurface(loadSurf);
+				nextTetrimino();
+			}
+			else
+				return false;
+		}
+		else
 			return false;
-		else if (field[items[i].y][items[i].x])
-			return false;
+	}
+	else
+		return false;
+
+	running = true;
 	return true;
 }
 
@@ -56,28 +97,25 @@ void Tetris::handleEvents()
 		delay = 50;
 }
 
-void Tetris::updateRender()
+void Tetris::setRectPos(SDL_Rect& rect, int x, int y, int w, int h)
 {
-	SDL_RenderCopy(render, background, NULL, NULL);
-	for (int i = 0; i < Lines; i++)
-		for (int j = 0; j < Cols; j++)
-			if (field[i][j])
-			{
-				setRectPos(srcR, field[i][j] * BlockW);
-				setRectPos(destR, j * BlockW, i * BlockH);
-				moveRectPos(destR, BlockW, ScreenH - (Lines + 1) * BlockH);
-				SDL_RenderCopy(render, blocks, &srcR, &destR);
-			}
+	rect = { x, y, w, h };
+}
+
+void Tetris::moveRectPos(SDL_Rect& rect, int x, int y)
+{
+	rect.x += x;
+	rect.y += y;
+}
+
+bool Tetris::isvalid()
+{
 	for (int i = 0; i < 4; i++)
-	{
-		setRectPos(srcR, color * BlockW);
-		setRectPos(destR, items[i].x * BlockW, items[i].y * BlockH);
-		moveRectPos(destR, BlockW, ScreenH - (Lines + 1) * BlockH);
-		SDL_RenderCopy(render, blocks, &srcR, &destR);
-	}
-
-	SDL_RenderPresent(render);
-
+		if (items[i].x < 0 || items[i].x >= Cols || items[i].y >= Lines)
+			return false;
+		else if (field[items[i].y][items[i].x])
+			return false;
+	return true;
 }
 
 void Tetris::gameplay()
@@ -149,54 +187,29 @@ void Tetris::gameplay()
 	delay = 300;
 
 }
-// metodos con argumentos 
 
-bool Tetris::init(const char* title)
+void Tetris::updateRender()
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-	{
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenW, ScreenH, SDL_WINDOW_SHOWN);
-		if (window != NULL)
-		{
-			render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-			if (render != NULL)
+	SDL_RenderCopy(render, background, NULL, NULL);
+	for (int i = 0; i < Lines; i++)
+		for (int j = 0; j < Cols; j++)
+			if (field[i][j])
 			{
-				SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
-				int imgFlags = IMG_INIT_PNG;
-				int initted = IMG_Init(imgFlags);
-				if ((initted & imgFlags) != imgFlags)
-					std::cout << "Failed to init required png support\n" << "IMG_Init() Error : " << IMG_GetError() << std::endl;
-				SDL_Surface* loadSurf = IMG_Load("img/background.png");
-				background = SDL_CreateTextureFromSurface(render, loadSurf);
-				SDL_FreeSurface(loadSurf);
-				loadSurf = IMG_Load("img/blocks.png");
-				blocks = SDL_CreateTextureFromSurface(render, loadSurf);
-				SDL_FreeSurface(loadSurf);
-				nextTetrimino();
+				setRectPos(srcR, field[i][j] * BlockW);
+				setRectPos(destR, j * BlockW, i * BlockH);
+				moveRectPos(destR, BlockW, ScreenH - (Lines + 1) * BlockH);
+				SDL_RenderCopy(render, blocks, &srcR, &destR);
 			}
-			else
-				return false;
-		}
-		else
-			return false;
+	for (int i = 0; i < 4; i++)
+	{
+		setRectPos(srcR, color * BlockW);
+		setRectPos(destR, items[i].x * BlockW, items[i].y * BlockH);
+		moveRectPos(destR, BlockW, ScreenH - (Lines + 1) * BlockH);
+		SDL_RenderCopy(render, blocks, &srcR, &destR);
 	}
-	else
-		return false;
 
-	running = true;
-	return true;
-}
+	SDL_RenderPresent(render);
 
-void Tetris::setRectPos(SDL_Rect& rect, int x, int y, int w, int h)
-{
-	rect = { x, y, w, h };
-}
-
-void Tetris::moveRectPos(SDL_Rect& rect, int x, int y)
-{
-	rect.x += x;
-	rect.y += y;
 }
 
 void Tetris::clean()
