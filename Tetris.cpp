@@ -188,7 +188,10 @@ bool Tetris::init(const char* title)
 	return true;
 }
 
-
+void Tetris::setRectPos(SDL_Rect& rect, int x, int y, int w, int h)
+{
+	rect = { x, y, w, h };
+}
 void Tetris::clean()
 {
 	SDL_DestroyTexture(blocks);
