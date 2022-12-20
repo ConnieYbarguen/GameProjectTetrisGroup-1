@@ -20,3 +20,38 @@ void Tetris::nextTetrimino()
 		items[i].y = int(figures[n][i] / 4);
 	}
 }
+
+void Tetris::handleEvents()
+{
+	SDL_Event e;
+	while (SDL_PollEvent(&e))
+	{
+		switch (e.type)
+		{
+		case SDL_QUIT:
+			running = false;
+			break;
+		case SDL_KEYDOWN:
+			switch (e.key.keysym.sym)
+			{
+			case SDLK_UP:
+				rotate = true;
+				break;
+			case SDLK_LEFT:
+				dx = -1;
+				break;
+			case SDLK_RIGHT:
+				dx = 1;
+				break;
+
+			default:
+				break;
+			}
+		default:
+			break;
+		}
+	}
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	if (state[SDL_SCANCODE_DOWN])
+		delay = 50;
+}
