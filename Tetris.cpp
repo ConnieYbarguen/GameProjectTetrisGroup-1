@@ -192,6 +192,13 @@ void Tetris::setRectPos(SDL_Rect& rect, int x, int y, int w, int h)
 {
 	rect = { x, y, w, h };
 }
+
+void Tetris::moveRectPos(SDL_Rect& rect, int x, int y)
+{
+	rect.x += x;
+	rect.y += y;
+}
+
 void Tetris::clean()
 {
 	SDL_DestroyTexture(blocks);
