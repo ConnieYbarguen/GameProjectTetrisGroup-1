@@ -149,6 +149,44 @@ void Tetris::gameplay()
 	delay = 300;
 
 }
+// metodos con argumentos 
+
+bool Tetris::init(const char* title)
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	{
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenW, ScreenH, SDL_WINDOW_SHOWN);
+		if (window != NULL)
+		{
+			render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+			if (render != NULL)
+			{
+				SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
+				int imgFlags = IMG_INIT_PNG;
+				int initted = IMG_Init(imgFlags);
+				if ((initted & imgFlags) != imgFlags)
+					std::cout << "Failed to init required png support\n" << "IMG_Init() Error : " << IMG_GetError() << std::endl;
+				SDL_Surface* loadSurf = IMG_Load("img/background.png");
+				background = SDL_CreateTextureFromSurface(render, loadSurf);
+				SDL_FreeSurface(loadSurf);
+				loadSurf = IMG_Load("img/blocks.png");
+				blocks = SDL_CreateTextureFromSurface(render, loadSurf);
+				SDL_FreeSurface(loadSurf);
+				nextTetrimino();
+			}
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+
+	running = true;
+	return true;
+}
 
 
 void Tetris::clean()
