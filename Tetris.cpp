@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Tetris.h"
 /*
+	guía para la formación de los bloques
 	0	1	2	3
 	4	5	6	7
 */
@@ -16,13 +17,13 @@ const int Tetris::figures[7][4] =
 };
 bool Tetris::init(const char* title)
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)//Inicializar todo lo anterior.
 	{
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");//filtrado lineal (compatible con OpenGL y Direct3D)
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, ScreenW, ScreenH, SDL_WINDOW_SHOWN);
 		if (window != NULL)
 		{
-			render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+			render = SDL_CreateRenderer(window/*la ventana donde se muestra el renderizado*/, -1, SDL_RENDERER_ACCELERATED);
 			if (render != NULL)
 			{
 				SDL_SetRenderDrawColor(render, 255, 255, 255, 255);
@@ -51,6 +52,7 @@ bool Tetris::init(const char* title)
 	return true;
 }
 
+//dar color a los cuadrados
 void Tetris::nextTetrimino()
 {
 	color = 1 + rand() % 7;
@@ -61,7 +63,7 @@ void Tetris::nextTetrimino()
 		items[i].y = int(figures[n][i] / 4);
 	}
 }
-
+//funciones de las teclas
 void Tetris::handleEvents()
 {
 	SDL_Event e;
@@ -92,8 +94,10 @@ void Tetris::handleEvents()
 			break;
 		}
 	}
-	const Uint8* state = SDL_GetKeyboardState(NULL);
-	if (state[SDL_SCANCODE_DOWN])
+	const Uint8* state = SDL_GetKeyboardState(NULL);//Obtener una instantánea del estado actual del teclado.
+	if (state[SDL_SCANCODE_DOWN])//(la tecla de flecha abajo (teclado de navegación))
+
+
 		delay = 50;
 }
 
@@ -121,10 +125,10 @@ bool Tetris::isvalid()
 void Tetris::gameplay()
 {
 	
-	////////// backup
+	//copia de seguridad
 	for (int i = 0; i < 4; i++)
 		backup[i] = items[i];
-	////////// move
+	//mover
 	if (dx)
 	{
 		for (int i = 0; i < 4; i++)
@@ -136,10 +140,10 @@ void Tetris::gameplay()
 				items[i] = backup[i];
 	}
 	
-	///////// rotate
+	//rotación
 	if (rotate)
 	{
-		Point p = items[2];	// center of rotation
+		Point p = items[2];	// centro de la rotación
 		for (int i = 0; i < 4; i++)
 		{
 			int x = items[i].y - p.y;
@@ -151,7 +155,7 @@ void Tetris::gameplay()
 			for (int i = 0; i < 4; i++)
 				items[i] = backup[i];
 	}
-	///////// tick
+	//tick
 	if (currentTime - startTime >delay)
 	{
 		for (int i = 0; i < 4; i++)
@@ -168,7 +172,7 @@ void Tetris::gameplay()
 		startTime = currentTime;
 	}
 
-	//////// check lines
+	//comprobar lineas
 	int k = Lines - 1;
 	for (int i = k; i > 0; i--)
 	{
