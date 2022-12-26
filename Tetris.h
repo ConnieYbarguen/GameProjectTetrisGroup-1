@@ -1,13 +1,13 @@
-#pragma una vez
+#pragma once
 #ifndef TETRIS_H_
-#definir TETRIS_H_
+#define TETRIS_H_
 
-#incluir <SDL / SDL.h>
-#incluir <SDL2 / SDL_image.h>
-#incluir <cuerda>
-clase Tetris
+#include <SDL/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <string>
+class Tetris
 {
-público:
+public:
 	Tetris()
 	{
 	}
@@ -15,47 +15,47 @@ público:
 	{
 	}
 
-	vacío setCurrentTime(Uint32 t)
+	void setCurrentTime(Uint32 t)
 	{
 		currentTime = t;
 	}
 
-	bool correr()
+	bool isrunning()
 	{
-		regreso corriendo;
+		return running;
 	}
 	//CORRIGIENDO Y AGREGANDO
-	bool es válido();
+	bool isvalid();
 
-	bool init(const char* título);
-	vacío nextTetrimino();
-	vacío handleEvents();
-	vacío setRectPos(SDL_Rect& rect, int x = 0, int y = 0, int w = BlockW, int h = BlockH);
-	vacío moveRectPos(SDL_Rect& rect, int X, int y);
-	vacío juego();
-	vacío updateRender();
-	vacío limpio();
+	bool init(const char* title);
+	void nextTetrimino();
+	void handleEvents();
+	void setRectPos(SDL_Rect& rect, int x = 0, int y = 0, int w = BlockW, int h = BlockH);
+	void moveRectPos(SDL_Rect& rect, int x, int y);
+	void gameplay();
+	void updateRender();
+	void clean();
 
-privado:
+private:
 	enum { ScreenW = 600, ScreenH = 760 };
-	enum { BlockW = 36, Bloque H = 36 };
-	enum { Líneas = 20, Cols = 10 };
-	Ventana SDL_Window* = NULL;
+	enum { BlockW = 36, BlockH = 36 };
+	enum { Lines = 20, Cols = 10 };
+	SDL_Window* window = NULL;
 	SDL_Renderer* render = NULL;
-	SDL_Texture* fondo = NULL,* bloques = NULL;
+	SDL_Texture* background = NULL, * blocks = NULL;
 	SDL_Rect srcR = { 0, 0, BlockW, BlockH }, destR = { 0, 0, BlockW, BlockH };
 
-	bool ejecutando = falso;
-	int campo[Líneas][Cols] = { 0 };
-	estático const int cifras[7][4];
-	estructura Punto
+	bool running = false;
+	int field[Lines][Cols] = { 0 };
+	static const int figures[7][4];
+	struct Point
 	{
 		int x, y;
-	} artículos[4], copia de seguridad[4];
+	} items[4], backup[4];
 	int color = 1;
 	int dx = 0;
-	bool rotar = falso;
-	sin firmar int retraso = 300;
+	bool rotate = false;
+	unsigned int delay = 300;
 	Uint32 startTime = 0, currentTime = 0;
 };
 
