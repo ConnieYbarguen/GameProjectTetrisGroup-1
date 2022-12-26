@@ -84,7 +84,7 @@ void Tetris::handleEvents()
 			case SDLK_RIGHT:
 				dx = 1;
 				break;
-			
+
 			default:
 				break;
 			}
@@ -120,7 +120,7 @@ bool Tetris::isvalid()
 
 void Tetris::gameplay()
 {
-	
+
 	////////// backup
 	for (int i = 0; i < 4; i++)
 		backup[i] = items[i];
@@ -135,7 +135,7 @@ void Tetris::gameplay()
 			for (int i = 0; i < 4; i++)
 				items[i] = backup[i];
 	}
-	
+
 	///////// rotate
 	if (rotate)
 	{
@@ -152,7 +152,7 @@ void Tetris::gameplay()
 				items[i] = backup[i];
 	}
 	///////// tick
-	if (currentTime - startTime >delay)
+	if (currentTime - startTime > delay)
 	{
 		for (int i = 0; i < 4; i++)
 			backup[i] = items[i];
